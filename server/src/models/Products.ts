@@ -9,15 +9,21 @@ class Product extends Model<Product> {
         type: DataType.STRING(100),
         
     })
-    name: string;
+   declare name: string;
 
     @Column({
         type: DataType.FLOAT(6, 2),
         
     })
-    price: number;
+   declare price: number;
 
-  
+  @Default(true)
+   @Column({
+    type: DataType.BOOLEAN,
+    
+})
+declare isAvailable: boolean;
+
  
  
 

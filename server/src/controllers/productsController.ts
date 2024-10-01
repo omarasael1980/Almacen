@@ -9,9 +9,11 @@ import Product from '../models/Products';
         
     let { name, price,   } = req.body;
  
-  
+  console.log("Datos recibidos:", name, price);
+
     //ver si existe el producto
-    const product = await Product.findOne({ where: { name } });
+    const product = await Product.findOne({ where: { name:name.toUpperCase() } });
+    console.log(product);
     if (product) {
         res.status(400).send({ msg: 'Product already exists', title: 'Product already exists', error: true });
         return;
@@ -114,7 +116,26 @@ const updateProduct = async (req: Request, res: Response) => {
  
 //region deleteProduct
 const deleteProduct = async (req: Request, res: Response) => {
-    res.status(200).send({ msg: 'Product deleted', error:false });
+    try {
+        // Obtener el id
+        const { id } = req.params;
+ 
+        // Buscar el producto por su ID 
+        const product = await Product.findByPk(id);
+
+        if (!product) {
+            res.status(404).send({ msg: 'Product not found', title: 'Product not found', error: true });
+            return;
+        }
+ 
+        // Eliminar el producto
+         product.isAvailable = false;
+        await product.save();
+ 
+        res.status(200).send({ msg: 'Product deleted', title: 'Product deleted', error: false });
+    } catch (error) {
+        res.status(500).send({ msg: error.message, title: 'Internal server error', error: true });
+    }
 }
 
 export{

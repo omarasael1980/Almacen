@@ -7,15 +7,18 @@ const server = express();
 async function connect() {
     try {
         await db.authenticate();
-        console.log(colors.bgGreen.bold.white('Connection has been established successfully.'));
+       // console.log(colors.bgGreen.bold.white('Connection has been established successfully.'));
         db.sync();
-        console.log(colors.bgGreen.bold.white('Database synchronized successfully.'));
+      //  console.log(colors.bgGreen.bold.white('Database synchronized successfully.'));
     } catch (error) {
-        console.error(colors.bgRed.white('Unable to connect to the database:'));
+        //console.error(colors.bgRed.white('Unable to connect to the database:'));
     }
 }
 connect(); 
 server.use(express.json());
 server.use('/api/products', productsRouter);
-
+server.get('/api', (req, res) => {
+    res.json({ msg: 'Welcome to the API', title: 'API', error: false });
+}
+);
 export default server;  
