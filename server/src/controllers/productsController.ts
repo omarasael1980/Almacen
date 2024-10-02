@@ -18,11 +18,7 @@ import Product from '../models/Products';
         res.status(400).send({ msg: 'Product already exists', title: 'Product already exists', error: true });
         return;
     }else{
-        //ver si el precio es menor a 0
-        if(price < 0){
-            res.status(400).send({ msg: 'Price cannot be less than 0', title: 'Price cannot be less than 0', error: true });
-            return;
-        }else{
+       
             //cambiar a uppercase
             name = name.toUpperCase();
 
@@ -32,32 +28,27 @@ import Product from '../models/Products';
         
         res.status(201).send({ msg: productSaved, title: 'Product created', error: false });
         }
-    }
+    
 
      
 
     } catch (error) {
         res.status(500).send({ msg: error.message, title: 'Internal server error', error: true });
     }
-};
 
-
+  };
 
 //region Get Products
 
 const getProducts = async (req: Request, res: Response) => {
-   try {
     const products = await Product.findAll({
         order: [['id', 'DESC']]
     });
     res.status(200).send({ msg: products, title: 'Products retrieved', error: false });
-   } catch (error) {
-    res.status(500).send({ msg: error.message, title: 'Internal server error', error: true });
-   }
 }
 //region getAProduct
 const getAProduct = async (req: Request, res: Response) => {
- try {
+ 
       const { id } = req.params;
     const product = await Product.findByPk(id);
     if (!product) {
@@ -65,9 +56,7 @@ const getAProduct = async (req: Request, res: Response) => {
         return;
     }
     res.status(200).send({ msg: product, title: 'Product retrieved', error: false });
- } catch (error) {
-    res.status(500).send({ msg: error.message, title: 'Internal server error', error: true });
- }
+ 
 }
 //region updateProduct
 const updateProduct = async (req: Request, res: Response) => {
@@ -78,11 +67,7 @@ const updateProduct = async (req: Request, res: Response) => {
         // Obtener los datos del cuerpo de la solicitud
         const { name, price } = req.body;
         
-        // Verificar si name y price están presentes en req.body
-        if (!name || !price) {
-            res.status(400).send({ msg: 'Name and price are required', title: 'Invalid input', error: true });
-            return;
-        }
+       
  
         console.log("Datos recibidos:", name, price);
  
@@ -98,10 +83,7 @@ const updateProduct = async (req: Request, res: Response) => {
         
         // Asegurarse de que el precio sea un número
         const parsedPrice = parseFloat(price); 
-        if (isNaN(parsedPrice)) {
-            res.status(400).send({ msg: 'Invalid price value', title: 'Invalid input', error: true });
-            return;
-        }
+       
  
         product.price = parsedPrice;
  
