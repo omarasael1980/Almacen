@@ -2,6 +2,8 @@ import express from "express";
 import productsRouter from "./routes/ProductsRoutes"
 import db from "./config/db";
 import colors from "colors";
+import swaggerUI from "swagger-ui-express";
+import swaggerSpec from "./config/swagger";
 const server = express();
 // Connect to the database 
 export async function connect() {
@@ -17,8 +19,5 @@ export async function connect() {
 connect(); 
 server.use(express.json());
 server.use('/api/products', productsRouter);
-server.get('/api', (req, res) => {
-    res.json({ msg: 'Welcome to the API', title: 'API', error: false });
-}
-);
+server.use('/api/docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));  
 export default server;  
